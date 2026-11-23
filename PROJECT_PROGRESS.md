@@ -2,7 +2,7 @@
 
 **Project:** Order Tracking and Fulfillment Setup<br>
 **Updated:** 23 November 2026 (Asia/Kolkata)<br>
-**Status:** Core application and real MySQL 8.4.9 integration verified locally; container, browser E2E, and hosted deployment remain unverified.
+**Status:** Vercel production frontend is live at https://order-tracking-fulfillment.vercel.app. Its `/api` rewrite currently reaches the local Spring/MySQL backend through https://rescue-less-stake-orders.trycloudflare.com. The Vercel page, catalog API, customer registration/login, and protected customer endpoint passed live checks. Durable backend/database hosting, browser E2E, and Docker remain unverified.
 
 ## Environment inspected
 
@@ -54,7 +54,10 @@
 - Real MySQL 8.4.9 startup validated and applied Flyway V1–V3. A complete live REST flow registered a customer, created an address, checked out, reduced stock by one, emptied the cart, ran all five fulfillment actions, and fetched a seven-step DELIVERED tracking timeline. The admin API also created/edited/archived a product, adjusted allocated stock from 4 to 7, and queried orders/users/inventory.
 - After locating the existing MySQL, backend, and frontend processes, the MySQL app was restarted through the `.env` launcher. Its health is UP, CORS works for the frontend on 5174, and `GET /api/warehouses` is public as documented. `run-mysql.bat` offers an explicit visible startup for future user sessions.
 - The separate service on port 8080 remains untouched. This workspace uses port 8081 in its ignored `.env`; current frontend is on 5174.
-- Docker Compose and hosted deployment remain unverified. Docker is unavailable. Vercel requires team-scope approval, and the browser control tool did not grant Chrome access.
+- Docker Compose remains unverified because Docker is unavailable. The Vercel project has no Git source connection; backend service and managed database are not hosted. The browser control tool did not grant Chrome access.
+- Deployed the Vite frontend directly to the Vercel production project. The public site returned HTTP 200; `/api/products` returned eight products; customer registration, login, and a protected customer endpoint worked through its Vercel rewrite.
+- A temporary Cloudflare Quick Tunnel currently links the Vercel API rewrite to the local Spring/MySQL processes. It is ephemeral and has no uptime guarantee; when restarted, the hostname and `frontend/vercel.json` rewrite must be updated and redeployed.
+- `frontend/preview-server.cjs` remains available for a local full-stack preview.
 
 ## Remaining work
 
@@ -62,6 +65,7 @@
 
 - Run browser UI workflows for public/customer/admin/warehouse pages; Chrome control was not approved by the computer-use tool.
 - Verify Docker Compose on a host with Docker; Docker is unavailable here.
-- Add broader controller/concurrency integration tests and verify hosted deployment after provider credentials and a managed MySQL instance are available.
+- Add broader controller/concurrency integration tests; verify browser UI and Docker Compose when available.
 - Configure a GitHub remote only when one is provided; do not push without explicit permission.
-- Deploy only after provider credentials and a managed MySQL instance are available; no deployment has occurred.
+- Set up durable Java backend hosting and managed MySQL, then change the Vercel `/api` rewrite to the hosted backend and verify production checkout/tracking.
+- Connect a Git repository to Vercel for repeatable deployments; the current production deployment was uploaded directly from source files.

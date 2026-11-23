@@ -25,16 +25,20 @@
 - [x] Save a functionality-based completion assessment in `PROJECT_STATUS.md`.
 - [x] Verify public warehouse access and frontend CORS against the live MySQL-backed API.
 - [x] Verify admin product creation, editing, inventory adjustment, archiving, orders, and user directory on MySQL.
+- [x] Publish a temporary public full-stack preview and verify its app, API, and health routes externally.
 
 ## Blocked by local environment
 
 - [x] Install Oracle MySQL 8.4.9; Flyway V1–V3 applied and the full representative customer-to-delivery REST workflow passed against it.
 
 - [ ] Run Docker Compose (Docker is not installed or not on PATH).
-- [ ] Run hosted deployment after Vercel team approval and repository/source access are available.
-- [ ] Configure Git author identity, create the initial commit, and add a GitHub remote (no remote supplied; do not push without explicit permission).
+- [x] Deploy frontend to Vercel production and verify page, catalog API, customer registration/login, and protected endpoint.
+- [ ] Configure durable hosting for Spring backend and managed MySQL; current Vercel `/api` rewrite uses a temporary tunnel to local services.
+- [ ] Connect a Git source repository for repeatable Vercel builds; current production deployment was uploaded directly from source files.
+- [x] Create the initial local Git commit; `.env` remains ignored.
+- [ ] Add the chosen source repository remote and push after its URL/access are available.
 
-MySQL (3306), the MySQL-backed API (8081), and the frontend (5174) are currently running. The root `.env` is ignored by Git and targets port 8081 because another service occupies port 8080. Start a future MySQL session with `run-mysql.bat`, then launch the app using `run-backend.bat` and `run-frontend.bat`.
+Production frontend: https://order-tracking-fulfillment.vercel.app. Its `/api` route currently proxies through the temporary tunnel https://rescue-less-stake-orders.trycloudflare.com to this PC. MySQL (3306), the MySQL-backed API (8081), frontend (5174), full-stack preview server (4173), and Cloudflare tunnel must stay running for API requests to work. If the tunnel hostname changes, update `frontend/vercel.json` and redeploy. The root `.env` is ignored by Git and targets port 8081 because another service occupies port 8080. Start a future MySQL session with `run-mysql.bat`, then launch the app using `run-backend.bat` and `run-frontend.bat`.
 
 ## Future improvements
 

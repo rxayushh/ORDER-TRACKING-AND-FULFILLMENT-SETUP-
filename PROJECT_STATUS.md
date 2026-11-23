@@ -3,11 +3,11 @@
 **Project:** Order Tracking and Fulfillment Setup
 **Workspace:** `C:\Order Tracking`
 **Report date:** 23 November 2026 (Asia/Kolkata)
-**Assessment basis:** implementation review, backend test results, production frontend build, H2 API workflows, and a live MySQL 8.4.9 REST workflow. This rating is based on demonstrated behavior and verification depth, not the number of files.
+**Assessment basis:** implementation review, backend test results, production frontend build, H2 API workflows, a live MySQL 8.4.9 REST workflow, and public URL checks for the temporary full-stack preview. This rating is based on demonstrated behavior and verification depth, not the number of files.
 
 ## Overall completion estimate
 
-**Approximately 83% complete.** The principal application workflows and MySQL admin flows are implemented and verified; the full customer-to-delivery REST journey also passed against MySQL. Remaining deductions are incomplete browser-level verification, unverified Docker/hosted deployment, and MySQL not installed as a persistent Windows service. Payment remains intentionally simulated.
+**Approximately 84% of application functionality complete; production release readiness is lower.** The frontend is deployed on Vercel at [https://order-tracking-fulfillment.vercel.app](https://order-tracking-fulfillment.vercel.app). Its public catalog API, customer registration/login, and authenticated customer endpoint were verified through Vercel. The `/api` route currently proxies through a Cloudflare Quick Tunnel to this computer, so the backend and MySQL are not durably hosted and the app’s API will stop responding when this computer or tunnel stops. The tunnel URL can change on restart and the Vercel rewrite must then be redeployed. Remaining deductions are incomplete browser-level verification, no durable hosted backend/managed database, and MySQL not installed as a persistent Windows service. Payment remains intentionally simulated.
 
 This is an engineering estimate rather than a test-coverage percentage. Core application behavior is substantially implemented; acceptance and operational readiness are not complete.
 
@@ -15,8 +15,8 @@ This is an engineering estimate rather than a test-coverage percentage. Core app
 |---|---:|---|
 | Core backend behavior | 95% | Layered services, role restrictions, database migrations, the customer-to-delivery lifecycle, product editing/archive, and stock adjustment were verified. Not every API branch has a live integration check. |
 | Frontend feature implementation | 85% | Role-specific pages and API client build successfully. A browser UI walkthrough was not completed, so page behavior and presentation are not claimed as fully verified. |
-| Frontend/backend integration | 92% | Customer checkout, stock reservation, fulfillment, tracking, CORS, public warehouse listing, and admin stock changes were exercised against the MySQL-backed API. Browser UI interaction remains unverified. |
-| Verification and release readiness | 65% | 25 backend tests, frontend build, H2 flows, MySQL migrations, and live MySQL customer/admin API flows passed. Docker Compose and hosted deployment remain unverified. |
+| Frontend/backend integration | 94% | Customer checkout, stock reservation, fulfillment, tracking, and admin stock changes passed against MySQL. Through the public Vercel URL, catalog, customer registration, login, and a protected endpoint worked via the API rewrite. Browser UI interaction remains unverified. |
+| Verification and release readiness | 75% | 25 backend tests, frontend build, H2 flows, MySQL migrations, live MySQL customer/admin API flows, and Vercel production build/HTTP/API checks passed. Browser UI, Docker Compose, and durable backend/database hosting remain unverified. |
 
 ## Frontend modules
 
@@ -89,7 +89,8 @@ REST endpoints are grouped under `/api`; the full route list is in `docs/api-doc
 - H2: Flyway V1–V3/JPA validation, representative order journey, cart clearing, stock reserve and cancellation restoration, and authorization regression tests passed.
 - MySQL 8.4.9: Flyway V1–V3 applied; app initialized; health, catalog, Swagger/OpenAPI, and a complete customer-to-delivery REST flow worked.
 - Current local runtime: MySQL is listening on 3306; the MySQL-backed API on 8081 is healthy; the frontend responds on 5174. CORS preflight from 127.0.0.1:5174 and unauthenticated GET /api/warehouses both return 200.
-- The visual browser walkthrough, Docker Compose, and deployment have not been verified. No known failing automated test is recorded. An earlier direct MySQL CLI inspection command was malformed; backend connectivity and complete REST workflows are stronger database evidence.
+- Vercel production deployment `https://order-tracking-fulfillment.vercel.app` is READY. The page returned HTTP 200; the proxied catalog API returned HTTP 200 and eight products; a customer was registered and logged in through the deployed API, and the authenticated addresses endpoint succeeded. The API proxy points at temporary tunnel `https://rescue-less-stake-orders.trycloudflare.com`; local MySQL/API/preview server and tunnel must remain online. No known failing automated test is recorded. An earlier direct MySQL CLI inspection command was malformed; backend connectivity and complete REST workflows are stronger database evidence.
+- Backend suite passed 25 tests (0 failures/errors); the frontend production bundle builds. Browser UI interaction has not been verified.
 
 ## Incomplete or unverified work
 
@@ -97,9 +98,9 @@ REST endpoints are grouped under `/api`; the full route list is in `docs/api-doc
 
 - Broader controller/integration coverage and concurrency testing under competing checkout requests.
 - Docker Compose execution and container health/restart behavior; Docker is not installed/on PATH in the inspected environment.
-- Hosted frontend/backend deployment and managed database verification. Vercel team approval is pending; no repository remote or deployment exists.
-- GitHub readiness is local only: files are staged in a local `main` repository, but there is no configured remote or initial commit. No push was made.
-- Hosted deployment has not started. Vercel returned 403 for team scope `teamayushtushar-7210`; a single-use team-authorization link was issued and is awaiting approval. There is no Git remote or deployment URL.
+- Durable backend hosting and managed database verification. The Vercel frontend deployment is live, but its API reaches the local Spring Boot/MySQL through an ephemeral Quick Tunnel.
+- GitHub readiness is local only: an initial local commit exists, but there is no configured remote or push.
+- Vercel project `order-tracking-fulfillment` is deployed to production and its alias is `order-tracking-fulfillment.vercel.app`. It was deployed directly from source files; no Git repository/automatic deploy connection exists. No hosted backend service or managed database is linked.
 - MySQL runs from a user-scoped data directory, not as a Windows service. `run-mysql.bat` starts it visibly; the console must stay open and it will need a restart after logoff/reboot.
 - Real payment, carrier API integration, customer notifications, proof of delivery, and advanced warehouse optimization are future enhancements, not currently implemented.
 
@@ -107,16 +108,15 @@ REST endpoints are grouped under `/api`; the full route list is in `docs/api-doc
 
 | Task | Estimate |
 |---|---:|
-| Start MySQL/API/frontend reliably from documented local setup; reconcile `.env` and launcher behavior | 2–4 hours |
-| Verify admin product/category/warehouse/user/inventory screens and APIs against MySQL | 4–8 hours |
-| Browser E2E for public, customer, admin, and warehouse paths; fix defects found | 1–2 days |
-| Add targeted controller/concurrency checks and update test/report documentation | 4–8 hours |
+| Keep the local MySQL/API/frontend processes and temporary tunnel running; convert MySQL to persistent service if desired | 30–90 minutes plus Windows setup |
+| Complete browser UI walkthrough for public, customer, admin, and warehouse paths; fix defects found | 4–10 hours |
+| Add targeted controller/concurrency checks | 4–8 hours |
 | Run Docker Compose and resolve environment-specific issues, once Docker is available | 2–5 hours |
-| Configure and verify a hosted deployment, once provider/database access is available | 4–8 hours plus provider setup |
-| Configure Git identity/remote and make an initial commit | 15–30 minutes once user supplies/chooses repository details and author identity |
+| Configure durable hosted backend, frontend, and managed MySQL; verify production flows | 4–8 hours of engineering plus hosting/account setup |
+| Configure Git remote and push the existing local commit | 15–30 minutes once repository access is available |
 
-**Estimated remaining project work:** roughly **3–5 focused engineering days**, plus external setup time for Docker, GitHub, and deployment. Real payment/carrier integrations would add separate scope and are not included.
+**Estimated remaining work:** about **1–2 focused days** for verification and launch hardening, or **4–8 hours of engineering plus provider/account setup** for a durable backend and managed database. The Vercel frontend is publicly live now; the API currently relies on this computer and an ephemeral tunnel. Real payment/carrier integrations would add separate scope and are not included.
 
 ## Working tree and safety
 
-No project files were deleted or recreated. `.env` is ignored by Git; generated local credentials are not included in the staged project files. The pre-existing scaffold remains staged locally; this report and recent launcher/security edits are not staged because the current workspace grants read-only access to `.git`. No commit or push was made. See `PROJECT_PROGRESS.md`, `TASKS.md`, and `README.md` for the running setup record.
+No project files were deleted or recreated. `.env` is ignored by Git; generated local credentials are not included in the repository commit. The local Git repository has an initial commit but no remote. The Vercel frontend was deployed directly from source, without Git-based CI. The full-stack preview server is in `frontend/preview-server.cjs`. See `PROJECT_PROGRESS.md`, `TASKS.md`, and `README.md` for the running setup record.
