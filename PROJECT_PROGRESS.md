@@ -1,8 +1,8 @@
 # Project Progress
 
 **Project:** Order Tracking and Fulfillment Setup<br>
-**Updated:** 23 November 2026 (Asia/Kolkata)<br>
-**Status:** Vercel production frontend is live at https://order-tracking-fulfillment.vercel.app. Its `/api` rewrite currently reaches the local Spring/MySQL backend through https://rescue-less-stake-orders.trycloudflare.com. The Vercel page, catalog API, customer registration/login, and protected customer endpoint passed live checks. Durable backend/database hosting, browser E2E, and Docker remain unverified.
+**Updated:** 24 November 2026 (Asia/Kolkata)<br>
+**Status:** Vercel production frontend is live at https://order-tracking-fulfillment.vercel.app. Its `/api` rewrite currently reaches the local Spring Boot development backend on port 8082 (in-memory H2) through https://brisbane-devices-easter-pad.trycloudflare.com. The Vercel page visibly rendered; catalog API, customer registration/login, and protected customer endpoint passed live checks. Durable backend/database hosting, browser E2E, and Docker remain unverified.
 
 ## Environment inspected
 
@@ -56,7 +56,7 @@
 - The separate service on port 8080 remains untouched. This workspace uses port 8081 in its ignored `.env`; current frontend is on 5174.
 - Docker Compose remains unverified because Docker is unavailable. The Vercel project has no Git source connection; backend service and managed database are not hosted. The browser control tool did not grant Chrome access.
 - Deployed the Vite frontend directly to the Vercel production project. The public site returned HTTP 200; `/api/products` returned eight products; customer registration, login, and a protected customer endpoint worked through its Vercel rewrite.
-- A temporary Cloudflare Quick Tunnel currently links the Vercel API rewrite to the local Spring/MySQL processes. It is ephemeral and has no uptime guarantee; when restarted, the hostname and `frontend/vercel.json` rewrite must be updated and redeployed.
+- A temporary Cloudflare Quick Tunnel currently links the Vercel API rewrite to the local Spring development backend on port 8082 (H2). It is ephemeral and has no uptime guarantee; when restarted, the hostname and `frontend/vercel.json` rewrite must be updated and redeployed.
 - `frontend/preview-server.cjs` remains available for a local full-stack preview.
 
 ## Remaining work

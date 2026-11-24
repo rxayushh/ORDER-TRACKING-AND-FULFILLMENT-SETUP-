@@ -38,7 +38,7 @@
 - [x] Create the initial local Git commit; `.env` remains ignored.
 - [ ] Add the chosen source repository remote and push after its URL/access are available.
 
-Production frontend: https://order-tracking-fulfillment.vercel.app. Its `/api` route currently proxies through the temporary tunnel https://rescue-less-stake-orders.trycloudflare.com to this PC. MySQL (3306), the MySQL-backed API (8081), frontend (5174), full-stack preview server (4173), and Cloudflare tunnel must stay running for API requests to work. If the tunnel hostname changes, update `frontend/vercel.json` and redeploy. The root `.env` is ignored by Git and targets port 8081 because another service occupies port 8080. Start a future MySQL session with `run-mysql.bat`, then launch the app using `run-backend.bat` and `run-frontend.bat`.
+Production frontend: https://order-tracking-fulfillment.vercel.app. Its `/api` route currently proxies through temporary tunnel https://brisbane-devices-easter-pad.trycloudflare.com to the local development backend on port 8082 (in-memory H2). The local backend and tunnel must stay running for remote API requests to work. If the tunnel hostname changes, update `frontend/vercel.json` and redeploy. For a durable MySQL local setup, start MySQL with `run-mysql.bat`, then configure `.env` for the MySQL profile and launch using `run-backend.bat` and `run-frontend.bat`.
 
 ## Future improvements
 

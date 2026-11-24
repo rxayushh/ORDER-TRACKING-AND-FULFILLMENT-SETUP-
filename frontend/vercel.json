@@ -1,6 +1,6 @@
 {
   "rewrites": [
-    { "source": "/api/:path*", "destination": "https://rescue-less-stake-orders.trycloudflare.com/api/:path*" },
+    { "source": "/api/:path*", "destination": "https://brisbane-devices-easter-pad.trycloudflare.com/api/:path*" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }

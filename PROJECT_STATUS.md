@@ -2,12 +2,12 @@
 
 **Project:** Order Tracking and Fulfillment Setup
 **Workspace:** `C:\Order Tracking`
-**Report date:** 23 November 2026 (Asia/Kolkata)
+**Report date:** 24 November 2026 (Asia/Kolkata)
 **Assessment basis:** implementation review, backend test results, production frontend build, H2 API workflows, a live MySQL 8.4.9 REST workflow, and public URL checks for the temporary full-stack preview. This rating is based on demonstrated behavior and verification depth, not the number of files.
 
 ## Overall completion estimate
 
-**Approximately 84% of application functionality complete; production release readiness is lower.** The frontend is deployed on Vercel at [https://order-tracking-fulfillment.vercel.app](https://order-tracking-fulfillment.vercel.app). Its public catalog API, customer registration/login, and authenticated customer endpoint were verified through Vercel. The `/api` route currently proxies through a Cloudflare Quick Tunnel to this computer, so the backend and MySQL are not durably hosted and the app’s API will stop responding when this computer or tunnel stops. The tunnel URL can change on restart and the Vercel rewrite must then be redeployed. Remaining deductions are incomplete browser-level verification, no durable hosted backend/managed database, and MySQL not installed as a persistent Windows service. Payment remains intentionally simulated.
+**Approximately 84% of application functionality complete; production release readiness is lower.** The frontend is deployed on Vercel at [https://order-tracking-fulfillment.vercel.app](https://order-tracking-fulfillment.vercel.app). Its public catalog API, customer registration/login, and authenticated customer endpoint were verified through Vercel. The `/api` route currently proxies through a Cloudflare Quick Tunnel to this computer's development backend on port 8082, which uses in-memory H2 data. The backend and database are not durably hosted and the app’s API will stop responding when this computer or tunnel stops. The tunnel URL can change on restart and the Vercel rewrite must then be redeployed. Remaining deductions are incomplete browser-level verification, no durable hosted backend/managed database, and no persistent local database in the current public preview. Payment remains intentionally simulated.
 
 This is an engineering estimate rather than a test-coverage percentage. Core application behavior is substantially implemented; acceptance and operational readiness are not complete.
 
@@ -89,7 +89,7 @@ REST endpoints are grouped under `/api`; the full route list is in `docs/api-doc
 - H2: Flyway V1–V3/JPA validation, representative order journey, cart clearing, stock reserve and cancellation restoration, and authorization regression tests passed.
 - MySQL 8.4.9: Flyway V1–V3 applied; app initialized; health, catalog, Swagger/OpenAPI, and a complete customer-to-delivery REST flow worked.
 - Current local runtime: MySQL is listening on 3306; the MySQL-backed API on 8081 is healthy; the frontend responds on 5174. CORS preflight from 127.0.0.1:5174 and unauthenticated GET /api/warehouses both return 200.
-- Vercel production deployment `https://order-tracking-fulfillment.vercel.app` is READY. The page returned HTTP 200; the proxied catalog API returned HTTP 200 and eight products; a customer was registered and logged in through the deployed API, and the authenticated addresses endpoint succeeded. The API proxy points at temporary tunnel `https://rescue-less-stake-orders.trycloudflare.com`; local MySQL/API/preview server and tunnel must remain online. No known failing automated test is recorded. An earlier direct MySQL CLI inspection command was malformed; backend connectivity and complete REST workflows are stronger database evidence.
+- Vercel production deployment `https://order-tracking-fulfillment.vercel.app` is READY and the home page visibly rendered in a browser. The proxied catalog API returned HTTP 200; a customer was registered and logged in through the deployed API, and the authenticated addresses endpoint succeeded. The current API proxy points at temporary tunnel `https://brisbane-devices-easter-pad.trycloudflare.com` and the local development backend (port 8082/H2). No known failing automated test is recorded. An earlier direct MySQL CLI inspection command was malformed; backend connectivity and complete REST workflows are stronger database evidence.
 - Backend suite passed 25 tests (0 failures/errors); the frontend production bundle builds. Browser UI interaction has not been verified.
 
 ## Incomplete or unverified work
@@ -98,7 +98,7 @@ REST endpoints are grouped under `/api`; the full route list is in `docs/api-doc
 
 - Broader controller/integration coverage and concurrency testing under competing checkout requests.
 - Docker Compose execution and container health/restart behavior; Docker is not installed/on PATH in the inspected environment.
-- Durable backend hosting and managed database verification. The Vercel frontend deployment is live, but its API reaches the local Spring Boot/MySQL through an ephemeral Quick Tunnel.
+- Durable backend hosting and managed database verification. The Vercel frontend deployment is live, but its API reaches the local Spring Boot/H2 development backend through an ephemeral Quick Tunnel.
 - GitHub readiness is local only: an initial local commit exists, but there is no configured remote or push.
 - Vercel project `order-tracking-fulfillment` is deployed to production and its alias is `order-tracking-fulfillment.vercel.app`. It was deployed directly from source files; no Git repository/automatic deploy connection exists. No hosted backend service or managed database is linked.
 - MySQL runs from a user-scoped data directory, not as a Windows service. `run-mysql.bat` starts it visibly; the console must stay open and it will need a restart after logoff/reboot.
